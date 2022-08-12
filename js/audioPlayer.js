@@ -15,7 +15,7 @@ export default class AudioPlayer {
     }
 
     init() {
-        fetch('/res/snippet.mp3')
+        fetch('/thevoice/res/snippet.mp3')
             .then(response => response.arrayBuffer())
             .then(arrayBuffer => this.audioContext.decodeAudioData(arrayBuffer))
             .then(audioBuffer => {
