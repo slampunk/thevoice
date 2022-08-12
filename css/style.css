@@ -1,0 +1,80 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100%;
+    background: black;
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h1 {
+    text-align: center;
+    margin: 1rem 0 0;
+    padding: 0;
+    line-height: 3rem;
+    font-weight: 400;
+}
+
+button {
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 50%;
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto;
+    position: relative;
+    padding: 0;
+    cursor: pointer;
+}
+
+button div {
+    border-radius: 0;
+    transition: clip-path 0.25s ease-out, width 0.25s ease-out, height 0.25s ease-out, top 0.25s ease-out, left 0.25s ease-out, border-radius 0.25s linear;
+}
+
+button div:nth-child(1) {
+    width: 4rem;
+    height: 4rem;
+    background: black;
+    position: absolute;
+    top: 2rem;
+    left: 2.25rem;
+    clip-path: polygon(0 0, 50% 1rem, 50% 3rem, 0 100%);
+}
+
+button div:nth-child(2) {
+    width: 2rem;
+    height: 2rem;
+    background: black;
+    position: absolute;
+    top: 3rem;
+    left: 4.25rem;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+button.playing div:nth-child(1) {
+    width: 3rem;
+    height: 3rem;
+    top: 1rem;
+    left: 2.5rem;
+    border-radius: 50%;
+    clip-path: polygon(0 0, 100% 0, 100% 2.75rem, 0 2.75rem);
+}
+
+button.playing div:nth-child(2) {
+    width: 1.5rem;
+    height: 3rem;
+    background: black;
+    position: absolute;
+    top: 4rem;
+    left: 3.25rem;
+    clip-path: polygon(0 0, 100% 0, 1.25rem 100%, 0.25rem 100%);
+}
