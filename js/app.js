@@ -3,9 +3,14 @@ import Button from './button.js'
 import AudioGetter from './audioGetter.js'
 import AudioAnalyser from './audioAnalyser.js';
 import AudioPlayer from './audioPlayer.js';
+import ScoreKeeper from './scorekeeper.js';
 
 function displayDetectedNote(note) {
     document.getElementById('lyrics').innerHTML = note;
+}
+
+function setLyrics() {
+    document.getElementById('lyrics').classList.add('start');
 }
 
 class App {
@@ -15,7 +20,9 @@ class App {
         this.audioGetter = new AudioGetter();
         this.AudioAnalyser = new AudioAnalyser();
         this.audioPlayer = new AudioPlayer();
-        window.emitter.on('detected.note', displayDetectedNote);
+        this.scoreKeeper = new ScoreKeeper();
+        // window.emitter.on('detected.note', displayDetectedNote);
+        window.emitter.on('audio.stream.attached', setLyrics);
     }
 }
 

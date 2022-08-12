@@ -81,7 +81,49 @@ button.playing div:nth-child(2) {
 
 #lyrics {
     height: 5rem;
-    line-height: 5rem;
+    line-height: 2rem;
     text-align: center;
-    font-size: 2rem;
+    padding: 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+#lyrics.start::before {
+    font-style: italic;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    animation: lyrics;
+    animation-duration: 37s;
+    animation-delay: 15s;
+    animation-timing-function: linear;
+    color: white;
+    content: '';
+    animation-fill-mode: forwards;
+}
+
+@keyframes lyrics {
+    0% {
+        content: 'I believe i can fly';
+    }
+    22% {
+        content: 'I believe i can touch the sky';
+    }
+    23% {
+        content: 'I think about it every night and day';
+    }
+    43% {
+        content: 'Spread my wings and fly away';
+    }
+    45% {
+        content: 'I believe i can soar';
+    }
+    62% {
+        content: 'I see me running thru that open door';
+    }
+    70% {
+        content: 'I believe i can fly';
+    }
 }

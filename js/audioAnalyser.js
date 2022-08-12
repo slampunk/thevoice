@@ -10,7 +10,7 @@ export default class AudioAnalyser {
         this.smoothingCount = 0;
         this.attachEvents();
         this.stream = null;
-        this.doVisualise = false;
+        this.doAnalyse = false;
         this.previousNote = '';
         this.lastDetectTimestamp = 0;
         this.detectionWindow = 125;
@@ -28,6 +28,12 @@ export default class AudioAnalyser {
     attachEvents() {
         this.emitter.on('audio.stream', this.attachAudioStream);
         this.emitter.on('audio.stream.attached', this.analyseStream);
+        this.emitter.on('song.ended', this.stopAnalysing);
+    }
+
+    stopAnalysing = () => {
+        console.log('got song stop event');
+        this.doAnalyse = false;
     }
 
     noteFromPitch(frequency) {
@@ -54,11 +60,15 @@ export default class AudioAnalyser {
         this.initAnalyser();
         this.audioSource = this.audioContext.createMediaStreamSource(this.stream);
         this.audioSource.connect(this.analyser);
-        this.doVisualise = true;
+        this.doAnalyse = true;
         this.detectPitch();
     }
 
     detectPitch = (timestamp = 0) => {
+        if (!this.doAnalyse) {
+            return;
+        }
+
         requestAnimationFrame(this.detectPitch);
         if (timestamp && timestamp - this.lastDetectTimestamp < this.detectionWindow) {
             return;
@@ -83,7 +93,7 @@ export default class AudioAnalyser {
             this.smoothingCount = 0;
         }
 
-        this.emitter.emit('detected.note', detectedNote);
+        this.emitter.emit('detected.note', detectedNote, timestamp);
     }
 
     autoCorrelate(buffer, sampleRate) {

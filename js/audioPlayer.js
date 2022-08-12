@@ -33,7 +33,9 @@ export default class AudioPlayer {
         setTimeout(() => {
             this.gainNode.gain.value = 0.1;
         }, 15000)
-        console.log(this.audioContext.currentTime);
+        source.addEventListener('ended', () => {
+            this.emitter.emit('song.ended');
+        });
         source.start();
     }
 }
