@@ -78,3 +78,10 @@ button.playing div:nth-child(2) {
     left: 3.25rem;
     clip-path: polygon(0 0, 100% 0, 1.25rem 100%, 0.25rem 100%);
 }
+
+#lyrics {
+    height: 5rem;
+    line-height: 5rem;
+    text-align: center;
+    font-size: 2rem;
+}
