@@ -13,7 +13,43 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
+#countdown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: 0;
+    opacity: 0;
+    pointer-events: none;
 
+    background: rgba(255,255,255,0.2);
+}
+#countdown.start {
+    animation: showCountdown;
+    animation-delay: 11s;
+    animation-duration: 4s;
+    animation-timing-function: linear;
+}
+#countdown.start::before {
+    width: 60vw;
+    height: 60vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    content: '3';
+    text-align: center;
+    line-height: 60vw;
+    border-radius: 50%;
+    animation: countDownNumbers;
+    animation-delay: 11.5s;
+    animation-duration: 4s;
+    color: black;
+    font-size: 20vw;
+    animation-fill-mode: forwards;
+}
 h1 {
     text-align: center;
     margin: 1rem 0 0;
@@ -125,5 +161,40 @@ button.playing div:nth-child(2) {
     }
     70% {
         content: 'I believe i can fly';
+    }
+}
+
+@keyframes showCountdown {
+    0% {
+        visibility: visible;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    96% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+@keyframes countDownNumbers {
+    0% {
+        content: '3';
+    }
+    25% {
+        content: '2';
+    }
+    50% {
+        content: '1';
+    }
+    75% {
+        content: 'Go!';
     }
 }

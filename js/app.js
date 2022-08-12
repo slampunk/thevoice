@@ -11,6 +11,7 @@ function displayDetectedNote(note) {
 
 function setLyrics() {
     document.getElementById('lyrics').classList.add('start');
+    document.getElementById('countdown').classList.add('start');
 }
 
 class App {
