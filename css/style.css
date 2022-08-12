@@ -124,6 +124,10 @@ button.playing div:nth-child(2) {
     position: relative;
 }
 
+#lyrics.olga {
+    font-size: 2rem;
+}
+
 #lyrics.start::before {
     font-style: italic;
     position: absolute;

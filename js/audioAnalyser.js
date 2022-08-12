@@ -1,5 +1,6 @@
 export default class AudioAnalyser {
-    constructor() {
+    constructor(singerType) {
+        this.singerType = singerType;
         this.audioContext = null;
         this.analyser = null;
         this.audioSource = null;
@@ -27,12 +28,15 @@ export default class AudioAnalyser {
 
     attachEvents() {
         this.emitter.on('audio.stream', this.attachAudioStream);
-        this.emitter.on('audio.stream.attached', this.analyseStream);
+        this.emitter.on(`audio.stream.attached.${this.singerType}`, this.analyseStream);
         this.emitter.on('song.ended', this.stopAnalysing);
+        if (this.singerType === 'originalArtist') {
+            this.emitter.on(`audiobuffer.originalartist.acapella`, this.attachAudioStream);
+            this.emitter.on(`audio.stream.attached.contestant`, this.startAudioSource);
+        }
     }
 
     stopAnalysing = () => {
-        console.log('got song stop event');
         this.doAnalyse = false;
     }
 
@@ -41,25 +45,36 @@ export default class AudioAnalyser {
         return Math.round(noteNum) + 69;
     }
 
-    attachAudioStream = stream => {
-        this.stream = stream;
+    startAudioSource = () => {
+        this.audioSource.start();
+    }
+
+    attachAudioStream = streamOrAudioBuffer => {
+        this.stream = streamOrAudioBuffer;
         this.initAnalyser();
-        this.audioSource = this.audioContext.createMediaStreamSource(this.stream);
+        this.audioSource = streamOrAudioBuffer instanceof MediaStream
+            ? this.getSourceFromMediaSteam(streamOrAudioBuffer)
+            : this.getSourceFromAudioBuffer(streamOrAudioBuffer);
+
         const lowpassFilter = this.audioContext.createBiquadFilter();
         lowpassFilter.type = 'lowpass';
         lowpassFilter.frequency.value = 1000;
         const highpassFilter = this.audioContext.createBiquadFilter();
         highpassFilter.type = 'highpass';
         highpassFilter.frequency.value = 100;
-        this.audioSource.connect(lowpassFilter).connect(highpassFilter).connect(this.analyser)
-        // this.audioSource.connect(this.analyser);
-        this.emitter.emit('audio.stream.attached');
+        this.audioSource.connect(lowpassFilter).connect(highpassFilter).connect(this.analyser);
+        this.emitter.emit(`audio.stream.attached.${this.singerType}`);
+    }
+
+    getSourceFromMediaSteam = stream => this.audioContext.createMediaStreamSource(stream);
+
+    getSourceFromAudioBuffer = audioBuffer => {
+        const source = this.audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        return source;
     }
 
     analyseStream = () => {
-        this.initAnalyser();
-        this.audioSource = this.audioContext.createMediaStreamSource(this.stream);
-        this.audioSource.connect(this.analyser);
         this.doAnalyse = true;
         this.detectPitch();
     }
@@ -93,7 +108,7 @@ export default class AudioAnalyser {
             this.smoothingCount = 0;
         }
 
-        this.emitter.emit('detected.note', detectedNote, timestamp);
+        this.emitter.emit(`detected.note.${this.singerType}`, detectedNote, timestamp);
     }
 
     autoCorrelate(buffer, sampleRate) {
